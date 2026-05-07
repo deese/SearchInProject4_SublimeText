@@ -3,14 +3,14 @@
   Do not change this file; change your user settings file instead
   */
 {
-  /* What engine to use; one of grep, ack, the_silver_searcher, or git_grep (or find_str, on Windows) */
-  /* The default is grep because it's widely available on *nix machines, but ack and The Silver Searcher are both faster, */
-  /* and git grep is also faster, but only works inside a Git repository */
-  "search_in_project_engine": "grep",
+  /* What engine to use. Choose one: grep, ack, the_silver_searcher, ripgrep, the_platinum_searcher or git_grep (or findstr, on Windows) */
+  /* Leave empty to use the platform default: findstr on Windows, grep on Linux/Mac. */
+  /* Override in your user settings file to pin a specific engine. */
+  "search_in_project_engine": "",
   "search_in_project_show_list_by_default": "false",
 
   /* Switch automatically to Find Results view when result count exceeds this threshold */
-  "search_in_project_max_quick_panel_results": 500,
+  "search_in_project_max_quick_panel_results": 100,
 
   /* Grep configuration */
   /* Path to grep executable; if the standard one doesn't work for you, you can specify an explicit path in your user config file. */

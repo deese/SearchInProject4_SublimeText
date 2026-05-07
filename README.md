@@ -41,7 +41,7 @@ The supported search engines are:
 | [ack](http://beyondgrep.com/)                                                             | not as fast as `pt` and `ag`, but still pretty good. Depends on perl, thus not so easy to install on Windows.                                                 | `ack`                   |
 | [git grep](http://git-scm.com/docs/git-grep)                                              | packaged with Git and really fast, but only works in Git repositories. Recommended if you use Windows and Git and really don't want to install anything else. | `git_grep`              |
 | [grep](https://en.wikipedia.org/wiki/Grep)                                                | fallback search tool available on Linux and OSX systems. Not recommended - just use the built-in Sublime Text search instead.                                 | `grep`                  |
-| [findstr](https://technet.microsoft.com/en-us/library/Bb490907.aspx)                      | fallback search tool available on Windows. Not recommended - just use the built-in Sublime Text search instead.                                               | `find_str`              |
+| [findstr](https://technet.microsoft.com/en-us/library/Bb490907.aspx)                      | fallback search tool available on Windows. Not recommended - just use the built-in Sublime Text search instead.                                               | `findstr`               |
 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Thats super fast and the one I presonally use | `rg` | 
 
 **You need to choose the engine that you want to use in the configuration file. The default is the one that available on every system, but it is easily the worst.**

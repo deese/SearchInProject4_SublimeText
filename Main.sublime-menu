@@ -56,65 +56,22 @@
                             },
                             { "caption": "-" },
                             {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings"},
-                                "caption": "Settings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {"file": "${packages}/User/SearchInProject4.sublime-settings"},
-                                "caption": "Settings – User"
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings",
+                                    "default": "{\n\t$0\n}\n"
+                                },
+                                "caption": "Settings"
                             },
                             { "caption": "-" },
                             {
-                                "command": "open_file",
+                                "command": "edit_settings",
                                 "args": {
-                                    "file": "${packages}/Search In Project 4/Default (OSX).sublime-keymap",
-                                    "platform": "OSX"
+                                    "base_file": "${packages}/Search In Project 4/Default ($platform).sublime-keymap",
+                                    "default": "[\n\t$0\n]\n"
                                 },
-                                "caption": "Key Bindings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/Search In Project 4/Default (Linux).sublime-keymap",
-                                    "platform": "Linux"
-                                },
-                                "caption": "Key Bindings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/Search In Project 4/Default (Windows).sublime-keymap",
-                                    "platform": "Windows"
-                                },
-                                "caption": "Key Bindings – Default"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/User/Default (OSX).sublime-keymap",
-                                    "platform": "OSX"
-                                },
-                                "caption": "Key Bindings – User"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/User/Default (Linux).sublime-keymap",
-                                    "platform": "Linux"
-                                },
-                                "caption": "Key Bindings – User"
-                            },
-                            {
-                                "command": "open_file",
-                                "args": {
-                                    "file": "${packages}/User/Default (Windows).sublime-keymap",
-                                    "platform": "Windows"
-                                },
-                                "caption": "Key Bindings – User"
-                            },
-                            { "caption": "-" }
+                                "caption": "Key Bindings"
+                            }
                         ]
                     }
                 ]

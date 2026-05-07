@@ -16,17 +16,19 @@
     "command": "search_in_project", "args": {"type": "prev"}
   },
   {
-    "caption": "Preferences: Search In Project 4 Settings – Default",
-    "command": "open_file", "args":
-    {
-      "file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings"
+    "caption": "Preferences: Search In Project 4 Settings",
+    "command": "edit_settings",
+    "args": {
+      "base_file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings",
+      "default": "{\n\t$0\n}\n"
     }
   },
   {
-    "caption": "Preferences: Search In Project 4 Settings – User",
-    "command": "open_file", "args":
-    {
-      "file": "${packages}/User/SearchInProject4.sublime-settings"
+    "caption": "Preferences: Search In Project 4 Key Bindings",
+    "command": "edit_settings",
+    "args": {
+      "base_file": "${packages}/Search In Project 4/Default ($platform).sublime-keymap",
+      "default": "[\n\t$0\n]\n"
     }
   }
 ]

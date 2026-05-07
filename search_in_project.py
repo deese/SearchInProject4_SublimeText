@@ -53,8 +53,8 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
 
     def load_search_engine(self) -> None:
         settings = sublime.load_settings("SearchInProject4.sublime-settings")
-        default_engine = "find_str" if os.name == "nt" else "grep"
-        self.engine_name = settings.get("search_in_project_engine", default_engine) or default_engine
+        platform_default = "findstr" if os.name == "nt" else "grep"
+        self.engine_name = settings.get("search_in_project_engine") or platform_default
         self.engine = searchengines.get_engine(self.engine_name, settings)
 
     def search(self) -> None:
