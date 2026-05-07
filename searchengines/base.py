@@ -1,209 +1,146 @@
-from inspect import trace
-import subprocess
+"""Base search engine for Search In Project."""
+
+from __future__ import annotations
+
+import os
 import re
 import shlex
-import sys
-import os
 import shutil
+import subprocess
 import traceback
+from typing import List, Tuple
 
 
 class Base:
-    """
-        This is the base search engine class.
-        Override it to define new search engines.
-    """
+    """Base search engine. Subclass to define new search engines."""
 
     SETTINGS = [
         "path_to_executable",
         "mandatory_options",
         "common_options",
     ]
-    PARSER_RE = re.compile(r'^((?:\w\:[\\|/]|\/)[^:]+):([\d:]+):(.*)')
+    PARSER_RE = re.compile(r"^((?:\w:[\\|/]|\/)[^:]+):([\d:]+):(.*)")
 
-    def __init__(self, settings):
-        """
-            Receives the sublime.Settings object
-        """
+    def __init__(self, settings) -> None:
         self.settings = settings
-        for setting_name in self.__class__.SETTINGS:
-            setting_value = self.settings.get(
-                self._full_settings_name(setting_name), '')
-            if sys.version < '3':
-                setting_value = setting_value.encode()
-            setattr(self, setting_name, setting_value)
+        for setting_name in self.SETTINGS:
+            value = self.settings.get(self._full_settings_name(setting_name), "")
+            setattr(self, setting_name, value)
 
-        # With this you can add a full path as path_to_executable
-        if not os.path.exists(self.path_to_executable) and os.name == "nt":
+        # Resolve executable path on Windows when explicitly configured.
+        if (
+            os.path.sep in self.path_to_executable
+            and not os.path.exists(self.path_to_executable)
+            and os.name == "nt"
+        ):
             self._resolve_windows_path_to_executable()
 
-    def dprint(self, d):
+    def dprint(self, msg: str) -> None:
         if self.settings.get("debug", False):
-            print(d)
+            print(msg)
 
-    def _check_arg_types(self, funcname, *args):
-        hasstr = hasbytes = False
-        for s in args:
-            if isinstance(s, str):
-                hasstr = True
-            elif isinstance(s, bytes):
-                hasbytes = True
-            else:
-                raise TypeError('%s() argument must be str or bytes, not %r' %
-                                (funcname, s.__class__.__name__)) from None
-        if hasstr and hasbytes:
-            raise TypeError(
-                "Can't mix strings and bytes in path components") from None
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
 
-    def _fspath(self, path):
-        """Return the path representation of a path-like object.
-        If str or bytes is passed in, it is returned unchanged. Otherwise the
-        os.PathLike interface is used to get the path representation. If the
-        path representation is not str or bytes, TypeError is raised. If the
-        provided path is not str, bytes, or os.PathLike, TypeError is raised.
-        """
-        if isinstance(path, (str, bytes)):
-            return path
-
-        # Work from the object's type to match method resolution of other magic
-        # methods.
-        path_type = type(path)
-        try:
-            path_repr = path_type.__fspath__(path)
-        except AttributeError:
-            if hasattr(path_type, '__fspath__'):
-                raise
-            else:
-                raise TypeError("expected str, bytes or os.PathLike object, "
-                                "not " + path_type.__name__)
-        if isinstance(path_repr, (str, bytes)):
-            return path_repr
-        else:
-            raise TypeError("expected {}.__fspath__() to return str or bytes, "
-                            "not {}".format(path_type.__name__,
-                                            type(path_repr).__name__))
-
-    def commonpath(self, paths):
-        """Given a sequence of path names, returns the longest common sub-path."""
-        if sys.version_info >= (3, 5, 0):
-            return os.path.commonpath(paths)
-
+    def commonpath(self, paths: List[str]) -> str:
+        """Return the longest common sub-path."""
         if not paths:
-            raise ValueError('commonpath() arg is an empty sequence')
+            raise ValueError("commonpath() arg is an empty sequence")
+        return os.path.commonpath(paths)
 
-        paths = tuple(map(self._fspath, paths))
-        sep = os.sep
+    def run(self, query: str, folders: List[str]) -> List[Tuple[str, ...]]:
+        """Run the search engine.
 
-        if isinstance(paths[0], bytes):
-            curdir = b'.'
-        else:
-            curdir = '.'
-
-        try:
-            split_paths = [path.split(sep) for path in paths]
-
-            try:
-                isabs, = set(p[:1] == sep for p in paths)
-            except ValueError:
-                raise ValueError(
-                    "Can't mix absolute and relative paths") from None
-
-            split_paths = [[c for c in s if c and c != curdir]
-                           for s in split_paths]
-            s1 = min(split_paths)
-            s2 = max(split_paths)
-            common = s1
-            for i, c in enumerate(s1):
-                if c != s2[i]:
-                    common = s1[:i]
-                    break
-
-            prefix = sep if isabs else sep[:0]
-            return prefix + sep.join(common)
-        except (TypeError, AttributeError):
-            self._check_arg_types('commonpath', *paths)
-            raise
-
-    def run(self, query, folders):
+        Returns a list of tuples where the first element is the file path
+        (optionally with row info separated by ``:``), and subsequent
+        elements contain result metadata.
         """
-            Run the search engine. Return a list of tuples, where first element is
-            the absolute file path, and optionally row information, separated
-            by a semicolon, and the second element is the result string
-        """
-        arguments = self._arguments(query, self._remove_subfolders(folders))
+        cleaned_folders = self._remove_subfolders(folders)
+        arguments = self._arguments(query, cleaned_folders)
+        cwd = self.commonpath(folders)
 
-        self.dprint("Running: %s" % " ".join(arguments))
+        self.dprint("[SearchInProject] folders: %s" % folders)
+        self.dprint("[SearchInProject] cwd: %s" % cwd)
+        self.dprint("[SearchInProject] cmd: %s" % " ".join(arguments))
 
         try:
             startupinfo = None
-            if os.name == 'nt':
+            if os.name == "nt":
                 startupinfo = subprocess.STARTUPINFO()
                 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-            pipe = subprocess.Popen(arguments,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    cwd=self.commonpath(folders),
-                                    startupinfo=startupinfo
-                                    )
-        except OSError as oe:  # Not FileNotFoundError for compatibility with Sublime Text 2
-            self.dprint("Found exception: {}".format(oe))
+            pipe = subprocess.Popen(
+                arguments,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=cwd,
+                startupinfo=startupinfo,
+            )
+        except OSError as exc:
+            self.dprint("Found exception: {}".format(exc))
             self.dprint(traceback.format_exc())
-            raise RuntimeError("Could not find executable %s" %
-                               self.path_to_executable)
+            raise RuntimeError(
+                "Could not find executable %s" % self.path_to_executable
+            ) from exc
 
         output, error = pipe.communicate()
 
+        self.dprint("[SearchInProject] returncode: %d" % pipe.returncode)
+        self.dprint("[SearchInProject] raw output: %r" % output[:500])
+        self.dprint("[SearchInProject] raw error: %r" % error[:200])
+
         if self._is_search_error(pipe.returncode, output, error):
             raise RuntimeError(self._sanitize_output(error))
+
         return self._parse_output(self._sanitize_output(output))
 
-    def _remove_subfolders(self, folders):
-        """
-            Optimize folder list by removing possible subfolders.
-        """
-        unique_folders = []
-        for folder in sorted(folders):
-            if (len(unique_folders) == 0 or
-                    not folder.startswith(unique_folders[-1])):
-                unique_folders.append(folder)
-        return unique_folders
+    # ------------------------------------------------------------------
+    # Hooks for subclasses
+    # ------------------------------------------------------------------
 
-    def _arguments(self, query, folders):
-        """
-            Prepare arguments list for the search engine.
-        """
-        return (
-            [self.path_to_executable] +
-            shlex.split(self.mandatory_options) +
-            shlex.split(self.common_options) +
-            [query] +
-            folders)
+    def _arguments(self, query: str, folders: List[str]) -> List[str]:
+        args: List[str] = [self.path_to_executable]
+        args.extend(shlex.split(self.mandatory_options))
+        args.extend(shlex.split(self.common_options))
+        args.append(query)
+        args.extend(folders)
+        return args
 
     def _sanitize_output(self, output):
-        return output.decode('utf-8', 'ignore').strip()
+        if isinstance(output, bytes):
+            output = output.decode("utf-8", "ignore")
+        return output.replace("\r\n", "\n").replace("\r", "\n").strip()
 
-    def _parse_output(self, output):
+    def _parse_output(self, output: str) -> List[Tuple[str, ...]]:
         lines = output.split("\n")
+        line_parts = []
+        for line in lines:
+            if not line.strip():
+                continue
+            matches = Base.PARSER_RE.findall(line)
+            if matches:
+                line_parts.append(matches[0])
+        return line_parts
 
-        line_parts = [Base.PARSER_RE.findall(line)[0] for line in lines]
+    def _is_search_error(self, returncode: int, output, error) -> bool:
+        return returncode != 0
 
-        return [line for line in line_parts]
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
 
-    def _is_search_error(self, returncode, output, error):
-        returncode != 0
+    def _remove_subfolders(self, folders: List[str]) -> List[str]:
+        unique: List[str] = []
+        for folder in sorted(folders):
+            if not unique or not folder.startswith(unique[-1]):
+                unique.append(folder)
+        return unique
 
-    def _full_settings_name(self, name):
+    def _full_settings_name(self, name: str) -> str:
         return "search_in_project_%s_%s" % (self.__class__.__name__, name)
 
-    def _filter_lines_without_matches(self, line_parts):
-        return filter(lambda line: len(line) > 2, line_parts)
-
-    def _resolve_windows_path_to_executable(self):
-        try:
-            if shutil.which(self.path_to_executable):
-                self.path_to_executable = shutil.which(self.path_to_executable)
-
-        except Exception as e:
-            print("Exception resolving windows path: {}".format(e))
-            pass
+    def _resolve_windows_path_to_executable(self) -> None:
+        resolved = shutil.which(self.path_to_executable)
+        if resolved:
+            self.path_to_executable = resolved
