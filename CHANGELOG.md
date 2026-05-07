@@ -1,4 +1,12 @@
-# Changelog for SearchInProject
+# Changelog for SearchInProject4
+
+## v1.0.0 NG
+ * Renamed the project. 
+ * Dropped support for ST4 <4500 Build. 
+ * Fixed the support for Windows
+ * Enabled threading to unblock the main program when searching on big folders
+
+--------- 8< ---------
 
 ## v1.9.0-alpha
 

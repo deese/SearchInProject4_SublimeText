@@ -60,4 +60,5 @@ You can always configure the full path to any search engine in the settings, as 
 ---
 
 Originally made by [Leonid Shevtsov](http://leonid.shevtsov.me)
+
 ST4 version by Javi/DeeSe
