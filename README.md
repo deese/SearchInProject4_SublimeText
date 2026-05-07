@@ -1,18 +1,11 @@
 Just in case you found this project by accident you have to know that.. 
 
-# This is just a small patch
 
-I'm just taking some time that I don't have to make the tool working in ST4 and Windows. 
-Currently it works but it blocks the screen when searching in a huge folder. 
+# Search In Project 4
 
-IT HAS NOT BEEN TESTED THOROUGHLY. First tests work on Mac and Windows. 
+![Search in Project screencast](https://raw.githubusercontent.com/deese/SearchInProject4_SublimeText/screencast/screencast.gif)
 
-
-# Search In Project
-
-![Search in Project screencast](https://raw.githubusercontent.com/deese/SearchInProject_SublimeText/screencast/screencast.gif)
-
-This plugin for [Sublime Text 2, 3 and 4](http://www.sublimetext.com/) lets you use your favorite search tool (`grep`, `ack`, `ag`, `pt`, `rg`, `git grep`, or `findstr`) to find strings aross your entire current Sublime Text project.
+This plugin for [Sublime Text 4 Build 4500 or higher](http://www.sublimetext.com/) lets you use your favorite search tool (`grep`, `ack`, `ag`, `pt`, `rg`, `git grep`, or `findstr`) to find strings aross your entire current Sublime Text project.
 
 It opens a quick selection panel to browse results, and highlights matches inside files.
 
@@ -28,13 +21,12 @@ If you select text and run Search In Project, the program will pre-fill the sear
 
 If you run Search In Project again, the program will remember the last search string, so the next search will be an ↩ away.
 
-**Important note for Windows users: the current release has known issues with running executables, and I would appreciate any bug reports from the field.**
 
 ## Installation
 
-[Package Control](http://sublime.wbond.net): install package **Search in Project** (this is the recommended method)
+[Package Control](http://sublime.wbond.net): install package **Search in Project 4** (this is the recommended method)
 
-Manual installation: download an [archive of the repository](https://github.com/deese/SearchInProject_SublimeText/archive/master.zip), and unzip into the Sublime Text Packages folder.
+Manual installation: download an [archive of the repository](https://github.com/deese/SearchInProject4_SublimeText/archive/master.zip), and unzip into the Sublime Text Packages folder.
 
 ### Installing search engines
 
@@ -50,13 +42,14 @@ The supported search engines are:
 | [git grep](http://git-scm.com/docs/git-grep)                                              | packaged with Git and really fast, but only works in Git repositories. Recommended if you use Windows and Git and really don't want to install anything else. | `git_grep`              |
 | [grep](https://en.wikipedia.org/wiki/Grep)                                                | fallback search tool available on Linux and OSX systems. Not recommended - just use the built-in Sublime Text search instead.                                 | `grep`                  |
 | [findstr](https://technet.microsoft.com/en-us/library/Bb490907.aspx)                      | fallback search tool available on Windows. Not recommended - just use the built-in Sublime Text search instead.                                               | `find_str`              |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | Thats super fast and the one I presonally use | `rg` | 
 
 **You need to choose the engine that you want to use in the configuration file. The default is the one that available on every system, but it is easily the worst.**
 
 ## Configuration
 
-Configuration is stored in a separate, user-specific `SearchInProject.sublime-settings` file. See the default file for configuration options; links to both could be
-found in the main menu in `Preferences -> Package Settings -> Search In Project`.
+Configuration is stored in a separate, user-specific `SearchInProject4.sublime-settings` file. See the default file for configuration options; links to both could be
+found in the main menu in `Preferences -> Package Settings -> Search In Project 4`.
 
 ## Issues with locating executables
 
@@ -66,6 +59,5 @@ You can always configure the full path to any search engine in the settings, as 
 
 ---
 
-Made by [Leonid Shevtsov](http://leonid.shevtsov.me)
-
-v1.9.0 by DeeSe
+Originally made by [Leonid Shevtsov](http://leonid.shevtsov.me)
+ST4 version by Javi/DeeSe

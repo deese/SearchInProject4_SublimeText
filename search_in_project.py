@@ -52,7 +52,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
     # ------------------------------------------------------------------
 
     def load_search_engine(self) -> None:
-        settings = sublime.load_settings("SearchInProject.sublime-settings")
+        settings = sublime.load_settings("SearchInProject4.sublime-settings")
         default_engine = "find_str" if os.name == "nt" else "grep"
         self.engine_name = settings.get("search_in_project_engine", default_engine) or default_engine
         self.engine = searchengines.get_engine(self.engine_name, settings)
@@ -141,7 +141,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
             sublime.message_dialog("No results")
             return
 
-        settings = sublime.load_settings("SearchInProject.sublime-settings")
+        settings = sublime.load_settings("SearchInProject4.sublime-settings")
         show_list = settings.get("search_in_project_show_list_by_default") == "true"
         limit = settings.get("search_in_project_max_quick_panel_results", self.MAX_QUICK_PANEL_RESULTS)
         over_limit = len(results) > limit
@@ -322,7 +322,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
         )
 
     def dprint(self, msg: str) -> None:
-        settings = sublime.load_settings("SearchInProject.sublime-settings")
+        settings = sublime.load_settings("SearchInProject4.sublime-settings")
         if settings.get("debug", False):
             print(msg)
 

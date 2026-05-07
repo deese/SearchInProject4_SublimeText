@@ -1,32 +1,32 @@
 [
   {
-    "caption": "SearchInProject: Search",
-    "command": "search_in_project", "args": {"type": "search"},
+    "caption": "Search In Project 4: Search",
+    "command": "search_in_project", "args": {"type": "search"}
   },
   {
-    "caption": "SearchInProject: Clear results",
-    "command": "search_in_project", "args": {"type": "clear"},
+    "caption": "Search In Project 4: Clear Results",
+    "command": "search_in_project", "args": {"type": "clear"}
   },
   {
-    "caption": "SearchInProject: Next result",
-    "command": "search_in_project", "args": {"type": "next"},
+    "caption": "Search In Project 4: Next Result",
+    "command": "search_in_project", "args": {"type": "next"}
   },
   {
-    "caption": "SearchInProject: Previous result",
-    "command": "search_in_project", "args": {"type": "prev"},
+    "caption": "Search In Project 4: Previous Result",
+    "command": "search_in_project", "args": {"type": "prev"}
   },
   {
-    "caption": "Preferences: Search in Project Settings – Default",
+    "caption": "Preferences: Search In Project 4 Settings – Default",
     "command": "open_file", "args":
     {
-      "file": "${packages}/Search in Project/SearchInProject.sublime-settings"
+      "file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings"
     }
   },
   {
-    "caption": "Preferences: Search in Project Settings – User",
+    "caption": "Preferences: Search In Project 4 Settings – User",
     "command": "open_file", "args":
     {
-      "file": "${packages}/User/SearchInProject.sublime-settings"
+      "file": "${packages}/User/SearchInProject4.sublime-settings"
     }
   }
 ]
