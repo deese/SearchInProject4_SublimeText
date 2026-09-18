@@ -22,5 +22,13 @@
       "base_file": "${packages}/Search in Project 4/Search in Project 4.sublime-settings",
       "default": "{\n\t$0\n}\n"
     }
+  },
+  {
+    "caption": "Preferences: Search in Project 4 Key Bindings",
+    "command": "edit_settings",
+    "args": {
+      "base_file": "${packages}/Search in Project 4/Example.sublime-keymap",
+      "default": "[\n\t$0\n]\n"
+    }
   }
 ]

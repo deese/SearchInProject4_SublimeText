@@ -66,7 +66,7 @@ Suggested bindings are included in [`Example.sublime-keymap`](Example.sublime-ke
 - **Windows/Linux:** `Ctrl+Alt+Shift+F`
 - **macOS:** `⌘⌥⇧F`
 
-To enable one, open `Preferences > Key Bindings` and copy the matching line for your platform into your user keymap on the right.
+To enable one, open `Preferences > Package Settings > Search in Project 4 > Key Bindings`, copy the matching line for your platform from the left panel to your user keymap on the right.
 
 ---
 
