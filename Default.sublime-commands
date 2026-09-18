@@ -1,33 +1,33 @@
 [
   {
-    "caption": "Search In Project 4: Search",
+    "caption": "Search in Project 4: Search",
     "command": "search_in_project", "args": {"type": "search"}
   },
   {
-    "caption": "Search In Project 4: Clear Results",
+    "caption": "Search in Project 4: Clear Results",
     "command": "search_in_project", "args": {"type": "clear"}
   },
   {
-    "caption": "Search In Project 4: Next Result",
+    "caption": "Search in Project 4: Next Result",
     "command": "search_in_project", "args": {"type": "next"}
   },
   {
-    "caption": "Search In Project 4: Previous Result",
+    "caption": "Search in Project 4: Previous Result",
     "command": "search_in_project", "args": {"type": "prev"}
   },
   {
-    "caption": "Preferences: Search In Project 4 Settings",
+    "caption": "Preferences: Search in Project 4 Settings",
     "command": "edit_settings",
     "args": {
-      "base_file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings",
+      "base_file": "${packages}/Search in Project 4/Search in Project 4.sublime-settings",
       "default": "{\n\t$0\n}\n"
     }
   },
   {
-    "caption": "Preferences: Search In Project 4 Key Bindings",
+    "caption": "Preferences: Search in Project 4 Key Bindings",
     "command": "edit_settings",
     "args": {
-      "base_file": "${packages}/Search In Project 4/Default ($platform).sublime-keymap",
+      "base_file": "${packages}/Search in Project 4/Default ($platform).sublime-keymap",
       "default": "[\n\t$0\n]\n"
     }
   }

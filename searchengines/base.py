@@ -1,4 +1,4 @@
-"""Base search engine for Search In Project."""
+"""Base search engine for Search in Project."""
 
 from __future__ import annotations
 

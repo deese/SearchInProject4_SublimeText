@@ -1,4 +1,5 @@
 import os
+import shutil
 from . import base
 
 
@@ -7,7 +8,7 @@ class Ack(base.Base):
         super().__init__(settings)
         # Ubuntu's ack from repos is called ack-grep by default
         if os.name != 'nt':  # no os.uname on Windows
-            if 'Ubuntu' in os.uname()[3] and self.path_to_executable == 'ack' and os.system('which ack-grep') == 0:
+            if 'Ubuntu' in os.uname()[3] and self.path_to_executable == 'ack' and shutil.which('ack-grep'):
                 self.path_to_executable = 'ack-grep'
 
 

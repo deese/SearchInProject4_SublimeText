@@ -52,7 +52,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
     # ------------------------------------------------------------------
 
     def load_search_engine(self) -> None:
-        settings = sublime.load_settings("SearchInProject4.sublime-settings")
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
         platform_default = "findstr" if os.name == "nt" else "grep"
         self.engine_name = settings.get("search_in_project_engine") or platform_default
         self.engine = searchengines.get_engine(self.engine_name, settings)
@@ -141,7 +141,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
             sublime.message_dialog("No results")
             return
 
-        settings = sublime.load_settings("SearchInProject4.sublime-settings")
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
         show_list = settings.get("search_in_project_show_list_by_default") == "true"
         limit = settings.get("search_in_project_max_quick_panel_results", self.MAX_QUICK_PANEL_RESULTS)
         over_limit = len(results) > limit
@@ -150,7 +150,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
         if show_list or over_limit:
             if over_limit:
                 self.window.status_message(
-                    "Search In Project: %d results — opening Find Results view" % len(results)
+                    "Search in Project: %d results — opening Find Results view" % len(results)
                 )
             self.list_in_view()
         else:
@@ -171,7 +171,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
                 return
             frame = frames[self._spinner_frame % len(frames)]
             self._spinner_frame += 1
-            self.window.status_message("Search In Project: %s searching for '%s'…" % (frame, query))
+            self.window.status_message("Search in Project: %s searching for '%s'…" % (frame, query))
             sublime.set_timeout(tick, 100)
 
         sublime.set_timeout(tick, 0)
@@ -322,7 +322,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
         )
 
     def dprint(self, msg: str) -> None:
-        settings = sublime.load_settings("SearchInProject4.sublime-settings")
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
         if settings.get("debug", False):
             print(msg)
 
@@ -353,7 +353,7 @@ class SearchInProjectResultsCommand(sublime_plugin.TextCommand):
             for filename in grouped_by_filename
         ]
 
-        header = 'Search In Project results for "%s" (%u lines in %u files):\n\n' % (
+        header = 'Search in Project results for "%s" (%u lines in %u files):\n\n' % (
             query,
             line_count,
             file_count,

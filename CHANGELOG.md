@@ -1,4 +1,4 @@
-# Changelog for SearchInProject4
+# Changelog for Search in Project 4
 
 ## v1.0.0 NG
  * Renamed the project. 

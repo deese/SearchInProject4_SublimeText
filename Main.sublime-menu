@@ -5,7 +5,7 @@
         "children":
         [
             {
-                "caption": "Search In Project 4",
+                "caption": "Search in Project 4",
                 "id": "search-in-project-4",
                 "children":
                 [
@@ -46,19 +46,19 @@
                 "children":
                 [
                     {
-                        "caption": "Search In Project 4",
+                        "caption": "Search in Project 4",
                         "children":
                         [
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/Search In Project 4/README.md"},
+                                "args": {"file": "${packages}/Search in Project 4/README.md"},
                                 "caption": "README"
                             },
                             { "caption": "-" },
                             {
                                 "command": "edit_settings",
                                 "args": {
-                                    "base_file": "${packages}/Search In Project 4/SearchInProject4.sublime-settings",
+                                    "base_file": "${packages}/Search in Project 4/Search in Project 4.sublime-settings",
                                     "default": "{\n\t$0\n}\n"
                                 },
                                 "caption": "Settings"
@@ -67,7 +67,7 @@
                             {
                                 "command": "edit_settings",
                                 "args": {
-                                    "base_file": "${packages}/Search In Project 4/Default ($platform).sublime-keymap",
+                                    "base_file": "${packages}/Search in Project 4/Default ($platform).sublime-keymap",
                                     "default": "[\n\t$0\n]\n"
                                 },
                                 "caption": "Key Bindings"

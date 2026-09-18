@@ -1,4 +1,4 @@
-"""Search engine registry for Search In Project."""
+"""Search engine registry for Search in Project."""
 
 import importlib
 from typing import TYPE_CHECKING

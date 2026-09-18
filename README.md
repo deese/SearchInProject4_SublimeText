@@ -1,7 +1,7 @@
 Just in case you found this project by accident you have to know that.. 
 
 
-# Search In Project 4
+# Search in Project 4
 
 ![Search in Project screencast](https://raw.githubusercontent.com/deese/SearchInProject4_SublimeText/screencast/screencast.gif)
 
@@ -11,15 +11,15 @@ It opens a quick selection panel to browse results, and highlights matches insid
 
 ## Usage
 
-* Call the "Search In Project 4: Search" command from the command palette, or
+* Call the "Search in Project 4: Search" command from the command palette, or
 * Use a key binding if you have configured one (see [Key Bindings](#key-bindings) below);
 * Enter the search query;
 * Hit `Enter` (`Return`). You'll be presented with a "quick select" panel with the search results. Select any file from that panel (it supports fuzzy searching) to go to the match. The search string will be highlighted with an outline and a circle symbol in the gutter area.
 * The last item on the quick select panel is "List results in view". Pick it to see results in a regular editor view. (Tip: if you enter three ticks ("`") in the search box - it's going to be to be the first item.)
 
-If you select text and run Search In Project, the program will pre-fill the search string with the selection text. For an example, to search for a word project-wide, press the following buttons: `⌘D, ⌘⌥⇧F, ↩`.
+If you select text and run Search in Project, the program will pre-fill the search string with the selection text. For an example, to search for a word project-wide, press the following buttons: `⌘D, ⌘⌥⇧F, ↩`.
 
-If you run Search In Project again, the program will remember the last search string, so the next search will be an ↩ away.
+If you run Search in Project again, the program will remember the last search string, so the next search will be an ↩ away.
 
 
 ## Installation
@@ -48,12 +48,12 @@ The supported search engines are:
 
 ## Configuration
 
-Configuration is stored in a separate, user-specific `SearchInProject4.sublime-settings` file. See the default file for configuration options; links to both could be
-found in the main menu in `Preferences -> Package Settings -> Search In Project 4`.
+Configuration is stored in a separate, user-specific `Search in Project 4.sublime-settings` file. See the default file for configuration options; links to both could be
+found in the main menu in `Preferences -> Package Settings -> Search in Project 4`.
 
 ## Issues with locating executables
 
-If Search In Project has problems with locating executables in Mac, install the [Fix Mac Path plugin](https://github.com/int3h/SublimeFixMacPath).
+If Search in Project has problems with locating executables in Mac, install the [Fix Mac Path plugin](https://github.com/int3h/SublimeFixMacPath).
 
 You can always configure the full path to any search engine in the settings, as a catch-all solution.
 
@@ -66,7 +66,7 @@ Suggested bindings are included in the keymap files:
 - **Windows/Linux:** `Ctrl+Alt+Shift+F`
 - **macOS:** `⌘⌥⇧F`
 
-To enable them, open `Preferences > Package Settings > Search In Project 4 > Key Bindings`, copy the commented line from the left panel to your user keymap on the right, and remove the `//`.
+To enable them, open `Preferences > Package Settings > Search in Project 4 > Key Bindings`, copy the commented line from the left panel to your user keymap on the right, and remove the `//`.
 
 ---
 
