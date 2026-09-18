@@ -61,12 +61,12 @@ You can always configure the full path to any search engine in the settings, as 
 
 No key bindings are active by default to avoid conflicts with other packages.
 
-Suggested bindings are included in the keymap files:
+Suggested bindings are included in [`Example.sublime-keymap`](Example.sublime-keymap):
 
 - **Windows/Linux:** `Ctrl+Alt+Shift+F`
 - **macOS:** `⌘⌥⇧F`
 
-To enable them, open `Preferences > Package Settings > Search in Project 4 > Key Bindings`, copy the commented line from the left panel to your user keymap on the right, and remove the `//`.
+To enable one, open `Preferences > Key Bindings` and copy the matching line for your platform into your user keymap on the right.
 
 ---
 

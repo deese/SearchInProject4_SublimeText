@@ -62,15 +62,6 @@
                                     "default": "{\n\t$0\n}\n"
                                 },
                                 "caption": "Settings"
-                            },
-                            { "caption": "-" },
-                            {
-                                "command": "edit_settings",
-                                "args": {
-                                    "base_file": "${packages}/Search in Project 4/Default ($platform).sublime-keymap",
-                                    "default": "[\n\t$0\n]\n"
-                                },
-                                "caption": "Key Bindings"
                             }
                         ]
                     }
