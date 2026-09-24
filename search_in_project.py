@@ -154,7 +154,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
                 )
             self.list_in_view()
         else:
-            self.results.append(("``` List results in view ```",))
+            self.results.insert(0, ("— List all results in view —",))
             self.window.show_quick_panel(
                 self._format_quick_panel(self.results),
                 self.goto_result,
@@ -186,8 +186,8 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
 
     def on_highlighted(self, file_no: int) -> None:
         self.last_selected_result_index = file_no
-        # last result is "list in view"
-        if file_no != -1 and file_no != len(self.results) - 1:
+        # index 0 is "list in view"
+        if file_no > 0:
             self.open_and_highlight_file(file_no, transient=True)
 
     def open_and_highlight_file(self, file_no: int, transient: bool = False) -> None:
@@ -210,7 +210,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
                 self.window.focus_view(self.saved_view)
             return
 
-        if file_no == len(self.results) - 1:  # last result is "list in view"
+        if file_no == 0:  # "list in view" is the first item
             self.list_in_view()
         else:
             self.open_and_highlight_file(file_no)
@@ -219,7 +219,7 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
         if not self.last_search_string:
             return
         new_index = self.last_selected_result_index + offset
-        if 0 <= new_index < len(self.results) - 1:
+        if 1 <= new_index < len(self.results):
             self.last_selected_result_index = new_index
             self.goto_result(new_index)
 
@@ -228,12 +228,12 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
     # ------------------------------------------------------------------
 
     def clear_markup(self) -> None:
-        # every result except the last one (the "list in view")
-        for result in self.results[:-1]:
+        # skip index 0 (the "list in view" item)
+        for result in self.results[1:]:
             file_name_and_col = self._make_file_path(result[0])
             file_name = file_name_and_col.split(":")[0]
             view = self.window.find_open_file(file_name)
-            if view:  # if the view is no longer open, do nothing
+            if view:
                 view.erase_regions("search_in_project")
         self.results = []
 
@@ -389,7 +389,7 @@ class SearchInProjectGoToResultCommand(sublime_plugin.TextCommand):
         # Case 1: cursor is on a file path line
         match = self.FILE_LINE_RE.match(line)
         if match:
-            file_path = match.group(1)
+            file_path = re.sub(r':\d+$', '', match.group(1))
             if os.path.exists(file_path):
                 window.open_file(file_path + ":1", sublime.ENCODED_POSITION)
             return
@@ -408,20 +408,25 @@ class SearchInProjectGoToResultCommand(sublime_plugin.TextCommand):
             line = view.substr(view.line(view.text_point(r, 0))).rstrip("\n")
             match = self.FILE_LINE_RE.match(line)
             if match:
-                return match.group(1)
+                return re.sub(r':\d+$', '', match.group(1))
         return None
 
     def _parse_location(self, line):
         stripped = line.lstrip()
         parts = stripped.split(":", 2)
+        if not parts:
+            return None
+        try:
+            int(parts[0])
+        except ValueError:
+            return None
         if len(parts) >= 2:
             try:
-                int(parts[0])
                 int(parts[1])
-                return ":".join(parts[:2])
+                return parts[0] + ":" + parts[1]
             except ValueError:
                 pass
-        return None
+        return parts[0]
 
 
 class SearchInProjectResultsEventListener(sublime_plugin.EventListener):
@@ -433,9 +438,3 @@ class SearchInProjectResultsEventListener(sublime_plugin.EventListener):
         if command_name == "insert" and args and args.get("characters") == "\n":
             return ("search_in_project_go_to_result", {})
         return None
-
-    def on_post_text_command(self, view, command_name, args):
-        if not view.settings().get("search_in_project_results"):
-            return
-        if command_name == "drag_select" and args and args.get("by") == "words":
-            view.run_command("search_in_project_go_to_result")
