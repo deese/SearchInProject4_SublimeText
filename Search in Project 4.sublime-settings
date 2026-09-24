@@ -1,45 +1,59 @@
 {
   // Do not change this file; change your user settings file instead
 
-  // What engine to use. Choose one: grep, ack, the_silver_searcher, ripgrep, the_platinum_searcher or git_grep (or findstr, on Windows)
+  // What engine to use. Choose one: grep, ack, the_silver_searcher, ripgrep,
+  // the_platinum_searcher, git_grep, findstr.
   // Leave empty to use the platform default: findstr on Windows, grep on Linux/Mac.
-  // Override in your user settings file to pin a specific engine.
   "search_in_project_engine": "",
-  "search_in_project_show_list_by_default": "false",
+
+  "search_in_project_show_list_by_default": false,
 
   // Switch automatically to Find Results view when result count exceeds this threshold
   "search_in_project_max_quick_panel_results": 100,
 
-  // Grep configuration
-  // Path to grep executable; if the standard one doesn't work for you, you can specify an explicit path in your user config file.
-  "search_in_project_Grep_path_to_executable": "grep",
-  // Do NOT change these options; they are expected to be present for SearchInProject to work correctly.
-  "search_in_project_Grep_mandatory_options": "-nr",
-  // Specify additional options to be used with all searches here.
-  "search_in_project_Grep_common_options": "",
+  // Show a quick panel with search options before the search input
+  "search_in_project_show_options_panel": false,
 
-  // Ack configuration
-  "search_in_project_Ack_path_to_executable": "ack",
-  "search_in_project_Ack_mandatory_options": "",
-  "search_in_project_Ack_common_options": "--type-add haml=.haml --type-add js=.jsx",
+  // Search options (can also be toggled from the options panel)
+  "search_in_project_case_sensitive": false,
+  "search_in_project_use_regex": false,
 
-  // TheSilverSearcher configuration
-  "search_in_project_TheSilverSearcher_path_to_executable": "ag",
-  "search_in_project_TheSilverSearcher_mandatory_options": "--column --search-files --nogroup --nocolor",
-
-  // ThePlatinumSearcher configuration
-  "search_in_project_ThePlatinumSearcher_path_to_executable": "pt",
-  "search_in_project_ThePlatinumSearcher_mandatory_options": "--column --nogroup --nocolor",
-
-  // Ripgrep configuration
-  "search_in_project_Ripgrep_path_to_executable": "rg",
-  "search_in_project_Ripgrep_mandatory_options": "--column --no-heading --color never",
-
-  // GitGrep configuration
-  "search_in_project_GitGrep_path_to_executable": "git",
-  "search_in_project_GitGrep_mandatory_options": "grep --line",
-
-  // FindStr configuration
-  "search_in_project_FindStr_path_to_executable": "findstr",
-  "search_in_project_FindStr_mandatory_options": "/n /s /p"
+  // Per-engine configuration
+  "search_in_project_engines": {
+    "grep": {
+      "path": "grep",
+      "mandatory_options": "-nr",
+      "common_options": ""
+    },
+    "ack": {
+      "path": "ack",
+      "mandatory_options": "",
+      "common_options": "--type-add haml=.haml --type-add js=.jsx"
+    },
+    "the_silver_searcher": {
+      "path": "ag",
+      "mandatory_options": "--column --search-files --nogroup --nocolor",
+      "common_options": ""
+    },
+    "the_platinum_searcher": {
+      "path": "pt",
+      "mandatory_options": "--column --nogroup --nocolor",
+      "common_options": ""
+    },
+    "ripgrep": {
+      "path": "rg",
+      "mandatory_options": "--column --no-heading --color never",
+      "common_options": ""
+    },
+    "git_grep": {
+      "path": "git",
+      "mandatory_options": "grep --line",
+      "common_options": ""
+    },
+    "findstr": {
+      "path": "findstr",
+      "mandatory_options": "/n /s /p",
+      "common_options": ""
+    }
+  }
 }

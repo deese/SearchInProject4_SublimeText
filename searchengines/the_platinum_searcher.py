@@ -1,9 +1,8 @@
-from . import the_silver_searcher
+from . import base
 
 
-class ThePlatinumSearcher(the_silver_searcher.TheSilverSearcher):
-    # same implementation, different executable
-    pass
+class ThePlatinumSearcher(base.Base):
+    ENGINE_NAME = "the_platinum_searcher"
 
 
 engine_class = ThePlatinumSearcher

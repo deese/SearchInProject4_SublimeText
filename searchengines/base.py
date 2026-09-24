@@ -14,20 +14,16 @@ from typing import List, Tuple
 class Base:
     """Base search engine. Subclass to define new search engines."""
 
-    SETTINGS = [
-        "path_to_executable",
-        "mandatory_options",
-        "common_options",
-    ]
+    ENGINE_NAME: str = ""
     PARSER_RE = re.compile(r"^((?:\w:[\\|/]|\/)[^:]+):([\d:]+):(.*)")
 
     def __init__(self, settings) -> None:
         self.settings = settings
-        for setting_name in self.SETTINGS:
-            value = self.settings.get(self._full_settings_name(setting_name), "")
-            setattr(self, setting_name, value)
+        engine_cfg = settings.get("search_in_project_engines", {}).get(self.ENGINE_NAME, {})
+        self.path_to_executable = engine_cfg.get("path", "")
+        self.mandatory_options = engine_cfg.get("mandatory_options", "")
+        self.common_options = engine_cfg.get("common_options", "")
 
-        # Resolve executable path on Windows when explicitly configured.
         if (
             os.path.sep in self.path_to_executable
             and not os.path.exists(self.path_to_executable)
@@ -40,22 +36,26 @@ class Base:
             print(msg)
 
     # ------------------------------------------------------------------
+    # Search option flags (override in subclasses as needed)
+    # ------------------------------------------------------------------
+
+    def case_insensitive_flag(self) -> List[str]:
+        return ["-i"]
+
+    def literal_flag(self) -> List[str]:
+        """Flags to treat query as literal string. Regex-by-default engines must override."""
+        return []
+
+    # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
 
     def commonpath(self, paths: List[str]) -> str:
-        """Return the longest common sub-path."""
         if not paths:
             raise ValueError("commonpath() arg is an empty sequence")
         return os.path.commonpath(paths)
 
     def run(self, query: str, folders: List[str]) -> List[Tuple[str, ...]]:
-        """Run the search engine.
-
-        Returns a list of tuples where the first element is the file path
-        (optionally with row info separated by ``:``), and subsequent
-        elements contain result metadata.
-        """
         cleaned_folders = self._remove_subfolders(folders)
         arguments = self._arguments(query, cleaned_folders)
         cwd = self.commonpath(folders)
@@ -78,7 +78,6 @@ class Base:
                 startupinfo=startupinfo,
             )
         except OSError as exc:
-            self.dprint("Found exception: {}".format(exc))
             self.dprint(traceback.format_exc())
             raise RuntimeError(
                 "Could not find executable %s" % self.path_to_executable
@@ -103,6 +102,10 @@ class Base:
         args: List[str] = [self.path_to_executable]
         args.extend(shlex.split(self.mandatory_options))
         args.extend(shlex.split(self.common_options))
+        if not self.settings.get("search_in_project_case_sensitive", False):
+            args.extend(self.case_insensitive_flag())
+        if not self.settings.get("search_in_project_use_regex", False):
+            args.extend(self.literal_flag())
         args.append(query)
         args.extend(folders)
         return args
@@ -113,9 +116,8 @@ class Base:
         return output.replace("\r\n", "\n").replace("\r", "\n").strip()
 
     def _parse_output(self, output: str) -> List[Tuple[str, ...]]:
-        lines = output.split("\n")
         line_parts = []
-        for line in lines:
+        for line in output.split("\n"):
             if not line.strip():
                 continue
             matches = Base.PARSER_RE.findall(line)
@@ -136,9 +138,6 @@ class Base:
             if not unique or not folder.startswith(unique[-1]):
                 unique.append(folder)
         return unique
-
-    def _full_settings_name(self, name: str) -> str:
-        return "search_in_project_%s_%s" % (self.__class__.__name__, name)
 
     def _resolve_windows_path_to_executable(self) -> None:
         resolved = shutil.which(self.path_to_executable)

@@ -13,12 +13,23 @@ RESULT_RE = re.compile(r'^([^:]+):(\d+):(.*)$')
 class FindStr(base.Base):
     """Uses Windows built-in findstr command."""
 
+    ENGINE_NAME = "findstr"
+
+    def case_insensitive_flag(self):
+        return ["/i"]
+
     def _arguments(self, query, folders):
-        return (
+        args = (
             [self.path_to_executable] +
             shlex.split(self.mandatory_options) +
-            shlex.split(self.common_options) +
-            ["/d:%s" % ";".join(folders), query, "*.*"])
+            shlex.split(self.common_options)
+        )
+        if not self.settings.get("search_in_project_case_sensitive", False):
+            args.extend(self.case_insensitive_flag())
+        if self.settings.get("search_in_project_use_regex", False):
+            args.append("/r")
+        args.extend(["/d:%s" % ";".join(folders), query, "*.*"])
+        return args
 
     def _parse_output_with_base(self, output, common_path):
         results = []

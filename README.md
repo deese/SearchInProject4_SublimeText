@@ -5,57 +5,95 @@ Just in case you found this project by accident you have to know that..
 
 ![Search in Project screencast](https://raw.githubusercontent.com/deese/SearchInProject4_SublimeText/screencast/screencast.gif)
 
-This plugin for [Sublime Text 4 Build 4500 or higher](http://www.sublimetext.com/) lets you use your favorite search tool (`grep`, `ack`, `ag`, `pt`, `rg`, `git grep`, or `findstr`) to find strings aross your entire current Sublime Text project.
+This plugin for [Sublime Text 4 Build 4500 or higher](http://www.sublimetext.com/) lets you use your favorite search tool (`grep`, `ack`, `ag`, `pt`, `rg`, `git grep`, or `findstr`) to find strings across your entire current Sublime Text project.
 
-It opens a quick selection panel to browse results, and highlights matches inside files.
+It opens a quick selection panel to browse results, highlights matches inside files, and supports double-clicking results to jump directly to the matching line.
 
 ## Usage
 
-* Call the "Search in Project 4: Search" command from the command palette, or
-* Use a key binding if you have configured one (see [Key Bindings](#key-bindings) below);
-* Enter the search query;
-* Hit `Enter` (`Return`). You'll be presented with a "quick select" panel with the search results. Select any file from that panel (it supports fuzzy searching) to go to the match. The search string will be highlighted with an outline and a circle symbol in the gutter area.
-* The last item on the quick select panel is "List results in view". Pick it to see results in a regular editor view. (Tip: if you enter three ticks ("`") in the search box - it's going to be to be the first item.)
+1. Call **Search in Project 4: Search** from the command palette, or use a key binding (see [Key Bindings](#key-bindings) below).
+2. An options panel appears first, letting you toggle **Case sensitive** and **Use regex** before searching. Select **→ Search...** to proceed.
+3. Enter the search query and hit `Enter`.
+4. A quick panel lists the results. Select any entry to open the file at the matching line. The search string is highlighted with an outline and a circle symbol in the gutter.
+5. The first item in the quick panel is **— List all results in view —**. Select it to open all results in a dedicated editor view. From that view, press `Enter` or double-click any result line to navigate to it.
 
-If you select text and run Search in Project, the program will pre-fill the search string with the selection text. For an example, to search for a word project-wide, press the following buttons: `⌘D, ⌘⌥⇧F, ↩`.
+If you select text before running Search in Project, the selection is pre-filled as the search query. For example, to search for a word project-wide: `⌘D, ⌘⌥⇧F, ↩`.
 
-If you run Search in Project again, the program will remember the last search string, so the next search will be an ↩ away.
+If you run Search in Project again, the last search string is remembered, so repeating a search is just `↩` away.
 
+### Search options
+
+By default the search runs immediately after you enter the query. You can enable an options panel that appears before each search by setting `search_in_project_show_options_panel` to `true` in your user settings:
+
+```json
+{
+  "search_in_project_show_options_panel": true
+}
+```
+
+When enabled, the options panel lets you toggle search options before entering the query:
+
+| Option | Description |
+|---|---|
+| Case sensitive | Match exact casing. Off by default. |
+| Use regex | Treat the query as a regular expression. Off by default. |
+
+Options are persisted between searches. They can also be set directly in user settings via `search_in_project_case_sensitive` and `search_in_project_use_regex`.
 
 ## Installation
 
-[Package Control](http://sublime.wbond.net): install package **Search in Project 4** (this is the recommended method)
+[Package Control](http://sublime.wbond.net): add `https://raw.githubusercontent.com/deese/SearchInProject4_SublimeText/master/repository.json` as a repository, then install package **Search in Project 4**.
 
-Manual installation: download an [archive of the repository](https://github.com/deese/SearchInProject4_SublimeText/archive/master.zip), and unzip into the Sublime Text Packages folder.
+Manual installation: download an [archive of the repository](https://github.com/deese/SearchInProject4_SublimeText/archive/master.zip) and unzip into the Sublime Text Packages folder.
 
-### Installing search engines
+### Search engines
 
-My idea is that if you use this plugin it's because you already use one of the superior search engines like [The Silver Searcher](https://github.com/ggreer/the_silver_searcher) and want to use it from within Sublime Text.
+| Name | Description | Key |
+|---|---|---|
+| **[ripgrep](https://github.com/BurntSushi/ripgrep)** | **Extremely fast, recommended.** | `ripgrep` |
+| **[pt (The Platinum Searcher)](https://github.com/monochromegane/the_platinum_searcher)** | **Fast, binaries for every platform.** | `the_platinum_searcher` |
+| **[ag (The Silver Searcher)](http://geoff.greer.fm/ag/)** | **Equally fast, 3rd party binaries on Windows.** | `the_silver_searcher` |
+| [ack](http://beyondgrep.com/) | Requires Perl, not ideal on Windows. | `ack` |
+| [git grep](http://git-scm.com/docs/git-grep) | Bundled with Git, only works in Git repos. | `git_grep` |
+| [grep](https://en.wikipedia.org/wiki/Grep) | Available on Linux/macOS. | `grep` |
+| [findstr](https://technet.microsoft.com/en-us/library/Bb490907.aspx) | Built-in on Windows. Default on Windows if no engine is set. | `findstr` |
 
-The supported search engines are:
-
-| Name                                                                                      | Description                                                                                                                                                   | Search in Project key   |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| **[pt (The Platinum Searcher)](https://github.com/monochromegane/the_platinum_searcher)** | **fast, has binaries for every platform, recommended.**                                                                                                       | `the_platinum_searcher` |
-| **[ag (The Silver Searcher)](http://geoff.greer.fm/ag/)**                                 | **equally fast, only 3rd party binaries for Windows, also recommended**                                                                                       | `the_silver_searcher`   |
-| [ack](http://beyondgrep.com/)                                                             | not as fast as `pt` and `ag`, but still pretty good. Depends on perl, thus not so easy to install on Windows.                                                 | `ack`                   |
-| [git grep](http://git-scm.com/docs/git-grep)                                              | packaged with Git and really fast, but only works in Git repositories. Recommended if you use Windows and Git and really don't want to install anything else. | `git_grep`              |
-| [grep](https://en.wikipedia.org/wiki/Grep)                                                | fallback search tool available on Linux and OSX systems. Not recommended - just use the built-in Sublime Text search instead.                                 | `grep`                  |
-| [findstr](https://technet.microsoft.com/en-us/library/Bb490907.aspx)                      | fallback search tool available on Windows. Not recommended - just use the built-in Sublime Text search instead.                                               | `findstr`               |
-| [ripgrep](https://github.com/BurntSushi/ripgrep) | Thats super fast and the one I presonally use | `rg` | 
-
-**You need to choose the engine that you want to use in the configuration file. The default is the one that available on every system, but it is easily the worst.**
+Set the engine in settings via `search_in_project_engine`. Leave empty to use the platform default (`findstr` on Windows, `grep` on Linux/macOS).
 
 ## Configuration
 
-Configuration is stored in a separate, user-specific `Search in Project 4.sublime-settings` file. See the default file for configuration options; links to both could be
-found in the main menu in `Preferences -> Package Settings -> Search in Project 4`.
+Open `Preferences → Package Settings → Search in Project 4 → Settings` to edit your user configuration. The left panel shows all available options with their defaults.
+
+Key settings:
+
+| Setting | Default | Description |
+|---|---|---|
+| `search_in_project_engine` | `""` | Engine to use. Empty = platform default. |
+| `search_in_project_show_options_panel` | `false` | Show the options panel before each search. |
+| `search_in_project_case_sensitive` | `false` | Case-sensitive search. |
+| `search_in_project_use_regex` | `false` | Treat query as a regular expression. |
+| `search_in_project_show_list_by_default` | `false` | Always open results in a view instead of quick panel. |
+| `search_in_project_max_quick_panel_results` | `100` | Switch to results view automatically above this count. |
+
+Per-engine paths and options are configured under `search_in_project_engines`:
+
+```json
+{
+  "search_in_project_engines": {
+    "ripgrep": {
+      "path": "rg",
+      "mandatory_options": "--column --no-heading --color never",
+      "common_options": ""
+    }
+  }
+}
+```
 
 ## Issues with locating executables
 
-If Search in Project has problems with locating executables in Mac, install the [Fix Mac Path plugin](https://github.com/int3h/SublimeFixMacPath).
+On macOS, if Search in Project cannot find an executable, install the [Fix Mac Path plugin](https://github.com/int3h/SublimeFixMacPath).
 
-You can always configure the full path to any search engine in the settings, as a catch-all solution.
+You can always set the full path in `search_in_project_engines.<engine>.path` as a fallback.
 
 ## Key Bindings
 
@@ -64,9 +102,9 @@ No key bindings are active by default to avoid conflicts with other packages.
 Suggested bindings are included in [`Example.sublime-keymap`](Example.sublime-keymap):
 
 - **Windows/Linux:** `Ctrl+Alt+Shift+F`
-- **macOS:** `⌘⌥⇧F`
+- **macOS:** `⌥⌘⇧F`
 
-To enable one, open `Preferences > Package Settings > Search in Project 4 > Key Bindings`, copy the matching line for your platform from the left panel to your user keymap on the right.
+To activate one, open `Preferences → Package Settings → Search in Project 4 → Key Bindings`, copy the matching line for your platform from the left panel to your user keymap on the right.
 
 ---
 

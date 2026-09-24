@@ -70,15 +70,53 @@ class SearchInProjectCommand(sublime_plugin.WindowCommand):
             if not first_sel.empty():
                 selection_text = view.substr(first_sel)
 
-        initial_text = (
+        self._pending_search_text = (
             selection_text
             if selection_text and "\n" not in selection_text
             else self.last_search_string
         )
 
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
+        if settings.get("search_in_project_show_options_panel", True):
+            self._show_options_panel()
+        else:
+            self._show_input_panel()
+
+    def _show_options_panel(self) -> None:
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
+        case_sensitive = settings.get("search_in_project_case_sensitive", False)
+        use_regex = settings.get("search_in_project_use_regex", False)
+
+        items = [
+            "[%s] Case sensitive" % ("✓" if case_sensitive else " "),
+            "[%s] Use regex" % ("✓" if use_regex else " "),
+            "→ Search...",
+        ]
+        self.window.show_quick_panel(
+            items,
+            self._on_option_selected,
+            sublime.KEEP_OPEN_ON_FOCUS_LOST,
+        )
+
+    def _on_option_selected(self, index: int) -> None:
+        if index == -1:
+            return
+        settings = sublime.load_settings("Search in Project 4.sublime-settings")
+        if index == 0:
+            settings.set("search_in_project_case_sensitive", not settings.get("search_in_project_case_sensitive", False))
+            sublime.save_settings("Search in Project 4.sublime-settings")
+            self._show_options_panel()
+        elif index == 1:
+            settings.set("search_in_project_use_regex", not settings.get("search_in_project_use_regex", False))
+            sublime.save_settings("Search in Project 4.sublime-settings")
+            self._show_options_panel()
+        else:
+            self._show_input_panel()
+
+    def _show_input_panel(self) -> None:
         panel_view = self.window.show_input_panel(
             "Search in project:",
-            initial_text,
+            self._pending_search_text,
             self.perform_search,
             None,
             None,
@@ -438,3 +476,9 @@ class SearchInProjectResultsEventListener(sublime_plugin.EventListener):
         if command_name == "insert" and args and args.get("characters") == "\n":
             return ("search_in_project_go_to_result", {})
         return None
+
+    def on_post_text_command(self, view, command_name, args):
+        if not view.settings().get("search_in_project_results"):
+            return
+        if command_name == "drag_select" and args and args.get("by") == "words":
+            view.run_command("search_in_project_go_to_result")
