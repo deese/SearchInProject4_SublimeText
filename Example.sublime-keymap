@@ -1,10 +1,5 @@
 [
-    // Windows - copy the matching binding below to your user keymap to activate:
-    { "keys": ["ctrl+alt+shift+f"], "command": "search_in_project", "args": { "type": "search" } },
-
-    // OSX
-    { "keys": ["alt+super+shift+f"], "command": "search_in_project", "args": { "type": "search" } },
-
-    // Linux
-    { "keys": ["alt+ctrl+shift+f"], "command": "search_in_project", "args": { "type": "search" } }
+	// Copy and uncomment a binding below into your user keymap to activate it.
+	// { "keys": ["ctrl+alt+shift+f"], "command": "search_in_project", "args": { "type": "search" } },  // Windows/Linux
+	// { "keys": ["alt+super+shift+f"], "command": "search_in_project", "args": { "type": "search" } }   // macOS
 ]
